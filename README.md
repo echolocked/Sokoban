@@ -1,6 +1,6 @@
 Sokoban
 =======
-### Key Shotcuts/Accelerator
+### Key Shortcuts/Accelerators
 
 -ctrl+r: Reload current level
 
