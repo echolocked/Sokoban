@@ -14,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.LinkedList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -161,6 +162,7 @@ public class SokobanPanel extends JPanel
 					FileOutputStream fo = new FileOutputStream(file);
 					ObjectOutputStream oo = new ObjectOutputStream(fo);
 					oo.writeObject(board.map);
+					oo.writeObject(board.history);
 					oo.writeObject(board.levels);
 					oo.writeObject(board.crtLevel);
 					oo.writeObject(board.step);
@@ -182,6 +184,7 @@ public class SokobanPanel extends JPanel
 					FileInputStream fi = new FileInputStream(file);
 					ObjectInputStream oi = new ObjectInputStream(fi);
 					board.map = (Map)oi.readObject();
+					board.history = (LinkedList<Map>)oi.readObject();
 					board.levels = (int[])oi.readObject();
 					board.crtLevel = (int)oi.readObject();
 					board.step = (int)oi.readObject();

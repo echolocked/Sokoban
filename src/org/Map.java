@@ -11,7 +11,7 @@ import java.io.Serializable;
 /*
  * Level stores data of the initial setting of each level
  */
-public class Map implements Serializable {
+public class Map implements Serializable, Cloneable {
 	int N; 	// N is the maze's size
 	int M;		// M is number of boxes
 	int[][] wall;		// 0: empty; 1: wall; 2: destination; 3: box; 4: man;
@@ -52,5 +52,23 @@ public class Map implements Serializable {
 			y = Integer.parseInt((line.split(","))[1]);
 			wall[x][y] = 4;
 		}
+	}
+	
+	public Map(Map copy) {
+		N = copy.N;
+		M = copy.M;
+		wall = new int[N][N];
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				wall[i][j] = copy.wall[i][j];
+			}
+		}
+		x = copy.x;
+		y = copy.y;
+	}
+	
+	// deep clone
+	protected Object clone() throws CloneNotSupportedException {
+		return new Map(this);
 	}
 }

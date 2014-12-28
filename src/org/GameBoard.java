@@ -16,6 +16,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.LinkedList;
 
 import javax.imageio.IIOException;
 import javax.imageio.ImageIO;
@@ -26,6 +27,7 @@ import javax.swing.JPanel;
 public class GameBoard extends JPanel {
 	private JFrame frame;
 	public Map map;
+	public LinkedList<Map> history;
 	private Image[] imgs = new Image[7];
 	// private AudioClip acMove;
 	// private AudioClip acMatch;
@@ -43,6 +45,7 @@ public class GameBoard extends JPanel {
 		setPreferredSize(new Dimension(width*N, width*N));
 		setBackground(Color.BLACK);
 		stepFont = new Font(Font.SANS_SERIF, Font.BOLD, width-1);
+		history = new LinkedList<Map>();
 		
 		// load images
 		String filename;
@@ -81,6 +84,8 @@ public class GameBoard extends JPanel {
 		String filename = "src/levels/level" + k + ".txt";
 		try {
 			map = new Map(filename);
+			history = new LinkedList<Map>();
+			history.push((Map) map.clone());
 			crtLevel = k;
 			step = 0;
 			repaint();
@@ -88,6 +93,8 @@ public class GameBoard extends JPanel {
 			e.printStackTrace();
 			System.out.println("Cannot load map. Exit.");
 			System.exit(1);
+		} catch (CloneNotSupportedException ex) {
+			ex.printStackTrace();
 		}
 	}
 	
@@ -138,7 +145,8 @@ public class GameBoard extends JPanel {
 	
 	/* Return ture if (x1+dx, y1+dy) is a valid move. 
 	 * Return false otherwise. */
-	private boolean move(int step, int x1, int y1, int dx, int dy) {
+	private boolean move(int step, int x1, int y1, int dx, int dy) 
+										throws CloneNotSupportedException {
 		if (step > 2) {
 			return false;
 		}
@@ -216,36 +224,52 @@ public class GameBoard extends JPanel {
 	public class KeyHandler extends KeyAdapter {
 		public void keyPressed(KeyEvent e) {
 			int key = e.getKeyCode();
-			if (key == KeyEvent.VK_UP) {
-				if (move(1, map.x, map.y, -1, 0)) {
-					step++;
-					repaint();
-					checkWin();
+			try {
+				if (key == KeyEvent.VK_UP) {
+					if (move(1, map.x, map.y, -1, 0)) {
+						history.push((Map) map.clone());
+						step++;
+						repaint();
+						checkWin();
+					}
 				}
-			}
-			else if (key == KeyEvent.VK_DOWN) {
-				if (move(1, map.x, map.y, 1, 0)) {
-					step++;
-					repaint();
-					checkWin();
+				else if (key == KeyEvent.VK_DOWN) {
+					if (move(1, map.x, map.y, 1, 0)) {
+						history.push((Map) map.clone());
+						step++;
+						repaint();
+						checkWin();
+					}
 				}
-			}
-			else if (key == KeyEvent.VK_LEFT) {
-				if (move(1, map.x, map.y, 0, -1)) {
-					step++;
-					repaint();
-					checkWin();
+				else if (key == KeyEvent.VK_LEFT) {
+					if (move(1, map.x, map.y, 0, -1)) {
+						history.push((Map) map.clone());
+						step++;
+						repaint();
+						checkWin();
+					}
 				}
-			}
-			else if (key == KeyEvent.VK_RIGHT) {
-				if (move(1, map.x, map.y, 0, 1)) {
-					step++;
-					repaint();
-					checkWin();
+				else if (key == KeyEvent.VK_RIGHT) {
+					if (move(1, map.x, map.y, 0, 1)) {
+						history.push((Map) map.clone());
+						step++;
+						repaint();
+						checkWin();
+					}
 				}
-			}
-			else {
-				;
+				else if (key == KeyEvent.VK_B) {
+					if (step > 0) {
+						map = (Map) history.get(1).clone();
+						history.pop();
+						step--;
+						repaint();
+					}
+				}
+				else {
+					;
+				}
+			} catch (CloneNotSupportedException ex) {
+				ex.printStackTrace();
 			}
 		}
 	}
