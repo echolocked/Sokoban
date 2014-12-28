@@ -163,13 +163,15 @@ public class GameBoard extends JPanel {
 				map.y = y2;
 				return true;
 			}
-			// map.wall[x1][y1] == 7
-			else {
+			else if (map.wall[x1][y1] == 7) {
 				map.wall[x2][y2] = 4;
 				map.wall[x1][y1] = 2;
 				map.x = x2;
 				map.y = y2;
 				return true;
+			}
+			else {
+				return false;
 			}
 		}
 		if (map.wall[x2][y2] == 2) {
@@ -190,13 +192,15 @@ public class GameBoard extends JPanel {
 				map.y = y2;
 				return true;
 			}
-			// map.wall[x1][y1] == 7
-			else {
+			else if (map.wall[x1][y1] == 7) {
 				map.wall[x2][y2] = 7;
 				map.wall[x1][y1] = 2;
 				map.x = x2;
 				map.y = y2;
 				return true;
+			}
+			else {
+				return false;
 			}
 		}
 		else {
